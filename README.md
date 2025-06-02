@@ -47,8 +47,6 @@ portfolio/
 └── README.md                # You're reading it!
 ```
 
-**Note**: The project structure has been updated to reflect the actual files (`styles.css`, `script.js`) based on your previous request to separate the portfolio into multiple files. The `assets/images/` folder was removed since images are hosted externally (e.g., on Postimg), and no `js/` or `styles/` subfolders were created in the earlier setup.
-
 ---
 
 ## 🚀 How to Use Locally
@@ -79,8 +77,6 @@ portfolio/
 - 📷 [Instagram](https://www.instagram.com/narayana_ane_nenu/)
 - 📧 Email: [narayanathota23@gmail.com](mailto:narayananthota23@gmail.com)
 
-**Note**: I updated the Instagram link to match the one in your portfolio (`narayana_ane_nenu`) instead of the one in the prompt (`narayana.thota`), as the portfolio link is more recent and likely correct. I also updated the LinkedIn link to the one used in your portfolio for consistency.
-
 ---
 
 ## 📄 License
@@ -91,4 +87,4 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 > ⚡ *“Build it from scratch. Break it. Learn. Rebuild. That’s how you grow as a developer.”* – Narayana Thota
 
-*Last updated: June 02, 2025*
+
