@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Narayana Portfolio</title>
+
+  <!-- AOS Library -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- Font Awesome for Social Media Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      background: radial-gradient(circle at 20% 40%, rgba(0, 128, 255, 0.3), transparent 60%),
+                  radial-gradient(circle at 80% 60%, rgba(255, 0, 255, 0.2), transparent 60%);
+      background-color: #0f0f0f;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(15, 15, 15, 0.9);
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .logo:hover {
+      color: #2f62f5;
+    }
+
+    nav {
+      display: flex;
+      gap: 1rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #ccc;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #fff;
+    }
+
+    .sidebar-toggle {
+      display: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: white;
+    }
+
+    .sidebar {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 250px;
+      background-color: #111;
+      padding: 2rem;
+      z-index: 1001;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+    }
+
+    .sidebar a {
+      margin: 1rem 0;
+      font-size: 1.2rem;
+      color: #ccc;
+    }
+
+    .sidebar a:hover {
+      color: #2f62f5;
+    }
+
+    .close-btn {
+      align-self: flex-end;
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+      }
+
+      .sidebar-toggle {
+        display: block;
+      }
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 1rem;
+      position: relative;
+      margin-top: 70px;
+    }
+
+    .hero-content {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 span {
+      color: #2f62f5;
+    }
+
+    .hero p {
+      color: #c4c4c4;
+      font-size: 1.5rem;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    .hero-image {
+      flex: 0 0 auto;
+      width: 300px;
+      height: 300px;
+      margin-left: 1rem;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #2f62f5;
+      box-shadow: 0 0 15px rgba(47, 98, 245, 0.5);
+    }
+
+    .resume-btn {
+      padding: 0.75rem 2rem;
+      background-color: #2f62f5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+
+    .resume-btn:hover {
+      background-color: #1c3ec7;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        padding: 0 1rem;
+      }
+
+      .hero-content {
+        flex: none;
+      }
+
+      .hero h1 {
+        font-size: 3rem;
+      }
+
+      .hero p {
+        font-size: 0.9rem;
+        max-width: 90%;
+      }
+
+      .hero-image {
+        margin-left: 0;
+        margin-top: 1rem;
+        width: 200px;
+        height: 200px;
+      }
+
+      .resume-btn {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+      }
+    }
+
+    /* About section styles */
+    #about {
+      padding: 4rem 2rem;
+      background: radial-gradient(circle at 20% 40%, rgba(0, 128, 255, 0.3), transparent 60%),
+                  radial-gradient(circle at 80% 60%, rgba(255, 0, 255, 0.2), transparent 60%);
+      background-color: #0f0f0f;
+    }
+
+    #about h2 {
+      color: white;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 200%;
+    }
+
+    #about h2:hover {
+      color: #2f62f5;
+    }
+
+    #about p {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 1.5rem;
+      color: #ddd;
+      line-height: 1.8;
+    }
+
+    /* Skills section styles */
+    #skills {
+      padding: 5rem 2rem 4rem;
+      background: radial-gradient(circle at 20% 40%, rgba(0, 128, 255, 0.3), transparent 60%),
+                  radial-gradient(circle at 80% 60%, rgba(255, 0, 255, 0.2), transparent 60%);
+      background-color: #0f0f0f;
+    }
+
+    #skills h2 {
+      color: white;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+    }
+
+    #skills h2:hover {
+      color: #2f62f5;
+    }
+
+    .skills-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .skill-category {
+      margin-bottom: 2rem;
+    }
+
+    .skill-category h3 {
+      color: #2f62f5;
+      margin-bottom: 1rem;
+      font-size: 1.6rem;
+    }
+
+    .skill {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 0.5rem;
+      border-radius: 6px;
+      transition: transform 0.3s ease;
+    }
+
+    .skill:hover {
+      transform: translateY(-3px);
+    }
+
+    .skill img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      filter: invert(47%) sepia(98%) saturate(1352%) hue-rotate(200deg) brightness(95%) contrast(96%);
+    }
+
+    .skill-info {
+      flex: 1;
+    }
+
+    .skill-name {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+    }
+
+    .skill-name span {
+      color: #ddd;
+      font-size: 1.2rem;
+    }
+
+    .skill-bar {
+      background-color: #333;
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      background-color: #2f62f5;
+      height: 100%;
+      transition: width 1s ease-in-out;
+    }
+
+    @media (max-width: 768px) {
+      .skill img {
+        width: 32px;
+        height: 32px;
+      }
+
+      .skill-name span {
+        font-size: 1rem;
+      }
+
+      .skill {
+        padding: 0.4rem;
+      }
+
+      #skills h2 {
+        font-size: 2.2rem;
+      }
+
+      .skill-category h3 {
+        font-size: 1.4rem;
+      }
+
+      .skill-bar {
+        height: 8px;
+      }
+    }
+
+    /* Projects section styles */
+    #projects h2 {
+      color: white;
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      transition: color 0.3s ease;
+    }
+
+    #projects h2:hover {
+      color: #2f62f5;
+    }
+
+    /* Contact section styles */
+    #contact {
+      padding: 5rem 2rem;
+      background: radial-gradient(circle at 20% 40%, rgba(0, 128, 255, 0.3), transparent 60%),
+                  radial-gradient(circle at 80% 60%, rgba(255, 0, 255, 0.2), transparent 60%);
+      background-color: #0f0f0f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .form-container {
+      background: rgba(20, 20, 20, 0.95);
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(47, 98, 245, 0.4);
+      width: 90%;
+      max-width: 450px;
+      color: white;
+    }
+
+    #contact h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #2f62f5;
+      font-size: 2.5rem;
+    }
+
+    #contact h2:hover {
+      color: white;
+    }
+
+    #contact p {
+      text-align: center;
+      color: #aaa;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #ddd;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 18px;
+      border: 1px solid #444;
+      border-radius: 5px;
+      background-color: #1f1f1f;
+      color: #fff;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2f62f5;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1c3ec7;
+    }
+
+    #loadingMessage,
+    #successMessage {
+      text-align: center;
+      margin-top: 10px;
+      color: #2f62f5;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Social Media Section */
+    .social-media {
+      text-align: center;
+      padding: 3rem 0;
+      background: radial-gradient(circle at 20% 40%, rgba(0, 128, 255, 0.3), transparent 60%),
+                  radial-gradient(circle at 80% 60%, rgba(255, 0, 255, 0.2), transparent 60%);
+      background-color: #0f0f0f;
+    }
+
+    .social-media h2 {
+      color: white;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .social-media h2:hover {
+      color: #2f62f5;
+    }
+
+    .social-media p {
+      color: #aaa;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-media a {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      color: #ccc;
+      font-size: 1.8rem;
+      margin: 0 1rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-media a:hover {
+      border-color: #2f62f5;
+      background-color: #2f62f5;
+      color: white;
+    }
+
+    /* Footer with Copyright */
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      background-color: #1a1a1a;
+      color: #aaa;
+      font-size: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    footer .copyright-note {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      color: #aaa;
+    }
+
+    footer a {
+      color: #2f62f5;
+      text-decoration: none;
+      margin: 0 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #1c3ec7;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Narayana Thota</div>
+    <div class="sidebar-toggle" onclick="openSidebar()">☰</div>
+    <nav>
+      <a href="#home" onclick="scrollToSection('home')">HOME</a>
+      <a href="#about" onclick="scrollToSection('about')">ABOUT</a>
+      <a href="#skills" onclick="scrollToSection('skills')">SKILLS</a>
+      <a href="#projects" onclick="scrollToSection('projects')">PROJECTS</a>
+      <a href="#contact" onclick="scrollToSection('contact')">CONTACT</a>
+    </nav>
+  </header>
+
+  <div class="sidebar" id="sidebar">
+    <div class="close-btn" onclick="closeSidebar()">✕</div>
+    <a href="#home" onclick="scrollToSection('home'); closeSidebar()">HOME</a>
+    <a href="#about" onclick="scrollToSection('about'); closeSidebar()">ABOUT</a>
+    <a href="#skills" onclick="scrollToSection('skills'); closeSidebar()">SKILLS</a>
+    <a href="#projects" onclick="scrollToSection('projects'); closeSidebar()">PROJECTS</a>
+    <a href="#contact" onclick="scrollToSection('contact'); closeSidebar()">CONTACT</a>
+  </div>
+
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1 data-aos="fade-up">HEY, I'M <span>NARAYANA THOTA</span></h1>
+      <p data-aos="fade-up" data-aos-delay="200">
+        A passionate web developer, building interactive websites and applications that offer seamless digital experiences with precision and creativity.
+      </p>
+      <a href="assets/Narayana_Thota_Resume.pdf" class="resume-btn" data-aos="fade-up" data-aos-delay="400" download>Download Resume</a>
+    </div>
+    <div class="hero-image" data-aos="fade-up" data-aos-delay="600">
+      <img src="assets/WhatsApp Image 2024-12-15 at 15.46.55_f461ec3e.jpg" alt="Narayana Thota">
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2 data-aos="fade-up">ABOUT ME</h2>
+    <p data-aos="fade-up" data-aos-delay="200">
+      I'm Narayana Thota, a passionate web developer who blends creativity and logic to craft seamless digital experiences. With a strong foundation in front-end development and a deep interest in building intuitive user interfaces, I love transforming ideas into responsive, elegant websites.
+      <br><br>
+      My journey began with simple HTML pages and has grown into developing full-stack applications with interactive designs. Whether it's building a dynamic contact form, integrating APIs, or optimizing performance, I'm always eager to learn and implement the latest in web technologies.
+      <br><br>
+      I hold a Bachelor's degree in Computer Science from [Your University Name], where I developed a strong foundation in programming and problem-solving. During my academic years, I worked on various projects that sparked my interest in web development and AI, leading me to explore tools like TensorFlow and MongoDB.
+      <br><br>
+      Beyond code, I enjoy mentoring juniors, participating in hackathons, and brainstorming startup ideas. In my free time, I’m an avid photographer, capturing the beauty of nature, and I also enjoy gaming to unwind and spark creativity. My goal is to leverage technology to create innovative solutions that have a positive social impact, such as applications that promote sustainability or improve healthcare access.
+      <br><br>
+      I'm constantly evolving, and I believe the web is not just about functionality—it's about telling a story with every scroll and interaction.
+    </p>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills">
+    <h2 data-aos="fade-up">SKILLS</h2>
+    <div class="skills-container">
+      <!-- Languages -->
+      <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
+        <h3>Languages</h3>
+        <div class="skill" data-aos="fade-up" data-aos-delay="230">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/html5.svg" alt="HTML">
+          <div class="skill-info">
+            <div class="skill-name">
+              <span>HTML</span>
+              <span>90%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="width: 90%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="skill" data-aos="fade-up" data-aos-delay="260">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/css3.svg" alt="CSS">
+          <div class="skill-info">
+            <div class="skill-name">
+              <span>CSS</span>
+              <span>85%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="width: 85%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="skill" data-aos="fade-up" data-aos-delay="290">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/javascript.svg" alt="JavaScript">
+          <div class="skill-info">
+            <div class="skill-name">
+              <span>JavaScript</span>
+              <span>80%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="width: 80%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="skill" data-aos="fade-up" data-aos-delay="320">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/python.svg" alt="Python">
+          <div class="skill-info">
+            <div class="skill-name">
+              <span>Python</span>
+              <span>60%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="width: 60%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Databases -->
+      <div class="skill-category" data-aos="fade-up" data-aos-delay="350">
+        <h3>Databases</h3>
+        <div class="skill" data-aos="fade-up" data-aos-delay="380">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/mongodb.svg" alt="MongoDB">
+          <div class="skill-info">
+            <div class="skill-name">
+              <span>MongoDB</span>
+              <span>50%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="width: 50%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="skill" data-aos="fade-up" data-aos-delay="410">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/mysql.svg" alt="SQL">
+          <div class="skill-info">
+            <div class="skill-name">
+              <span>SQL</span>
+              <span>45%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="width: 45%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tools & Technologies -->
+      <div class="skill-category" data-aos="fade-up" data-aos-delay="440">
+        <h3>Tools & Technologies</h3>
+        <div class="skill" data-aos="fade-up" data-aos-delay="470">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg" alt="GitHub">
+          <div class="skill-info">
+            <div class="skill-name">
+              <span>GitHub</span>
+              <span>75%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="width: 75%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="skill" data-aos="fade-up" data-aos-delay="500">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/tensorflow.svg" alt="AI Tools">
+          <div class="skill-info">
+            <div class="skill-name">
+              <span>AI Tools</span>
+              <span>40%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="width: 40%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="skill" data-aos="fade-up" data-aos-delay="530">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/visualstudiocode.svg" alt="VS Code">
+          <div class="skill-info">
+            <div class="skill-name">
+              <span>VS Code</span>
+              <span>80%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="width: 80%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" style="padding: 5rem 2rem; background: radial-gradient(circle at 20% 40%, rgba(0, 128, 255, 0.3), transparent 60%), radial-gradient(circle at 80% 60%, rgba(255, 0, 255, 0.2), transparent 60%); background-color: #0f0f0f;">
+    <h2 data-aos="fade-up">PROJECTS</h2>
+    <p data-aos="fade-up" data-aos-delay="100" style="text-align: center; color: #aaa; font-size: 1.2rem; margin-bottom: 3rem;">
+      Discover a range of projects I’ve crafted, with each featuring its own compelling purpose and technology.
+    </p>
+
+    <!-- Project: Contact Form -->
+    <div class="project-container" data-aos="fade-up" style="display: flex; flex-wrap: wrap; gap: 2rem; margin-bottom: 4rem; align-items: center; justify-content: center;">
+      <img src="assets/Screenshot (44).png"alt="Contact Form Project" style="max-width: 500px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+      <div style="max-width: 500px;">
+        <h3 style="color: white; font-size: 1.8rem; margin-bottom: 0.5rem;">Contact Form Project</h3>
+        <p style="color: #ccc; font-size: 1rem; line-height: 1.6; font-style: italic; margin-bottom: 0.5rem;">
+          A responsive, full-stack contact form for collecting and storing user messages securely.
+        </p>
+        <p style="color: #ccc; font-size: 1rem; line-height: 1.6; margin-bottom: 0.5rem;">
+          This project allows users to submit their name, email, phone number, and message through an intuitive contact form. The form validates inputs on both the client and server sides. Submissions are stored in a MongoDB Atlas cloud database, and the backend is built with Express.js and Node.js. It’s designed to be integrated into a larger portfolio or business site, and the user interface is clean and professional.
+        </p>
+        <p style="color: #ccc; font-size: 1rem; line-height: 1.6; margin-bottom: 0.5rem;">
+          <strong>Technologies Used:</strong> HTML, CSS, JavaScript, Node.js & Express.js, MongoDB Atlas, Render (for backend deployment)
+        </p>
+        <a href="https://guileless-zuccutto-8d3554.netlify.app/" class="resume-btn" target="_blank" style="margin-top: 1rem; display: inline-block;">VISIT PROJECT</a>
+      </div>
+    </div>
+
+    <!-- Project: CNN Waste Classification -->
+    <div class="project-container" data-aos="fade-up" data-aos-delay="100" style="display: flex; flex-wrap: wrap; gap: 2rem; margin-bottom: 4rem; align-items: center; justify-content: center;">
+      <img src="assets/Screenshot (60).png" alt="CNN Model for Waste Classification" style="max-width: 500px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+      <div style="max-width: 500px;">
+        <h3 style="color: white; font-size: 1.8rem; margin-bottom: 0.5rem;">CNN Model for Waste Classification</h3>
+        <p style="color: #ccc; font-size: 1rem; line-height: 1.6; font-style: italic; margin-bottom: 0.5rem;">
+          A machine learning model that classifies plastic waste images into various categories using CNN.
+        </p>
+        <p style="color: #ccc; font-size: 1rem; line-height: 1.6; margin-bottom: 0.5rem;">
+          This project involves building a Convolutional Neural Network (CNN) to identify and classify different types of plastic waste, which is crucial for waste management and recycling automation. The model is trained on a dataset of plastic waste images and deployed using Streamlit for easy demo access. It demonstrates my understanding of deep learning, image processing, and real-world sustainability solutions.
+        </p>
+        <p style="color: #ccc; font-size: 1rem; line-height: 1.6; margin-bottom: 0.5rem;">
+          <strong>Technologies Used:</strong> Python, TensorFlow / Keras, NumPy, Matplotlib, Streamlit (for deployment)
+        </p>
+        <a href="https://wccnnrms.streamlit.app/" class="resume-btn" target="_blank" style="margin-top: 1rem; display: inline-block;">VISIT PROJECT</a>
+      </div>
+    </div>
+
+    <!-- Project: AI Health Assistant -->
+    <div class="project-container" data-aos="fade-up" data-aos-delay="200" style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; justify-content: center;">
+      <img src="assets/Screenshot 2025-02-11 221154.png" alt="AI Health Care Assistant" style="max-width: 500px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+      <div style="max-width: 500px;">
+        <h3 style="color: white; font-size: 1.8rem; margin-bottom: 0.5rem;">AI Health Care Assistant</h3>
+        <p style="color: #ccc; font-size: 1rem; line-height: 1.6; font-style: italic; margin-bottom: 0.5rem;">
+          A smart health assistant providing personalized responses to user symptoms using AI.
+        </p>
+        <p style="color: #ccc; font-size: 1rem; line-height: 1.6; margin-bottom: 0.5rem;">
+          A smart health assistant that provides personalized responses to user symptoms. Powered by AI and medical datasets, this project provides health recommendations and connects users with nearby hospitals using APIs.
+        </p>
+        <p style="color: #ccc; font-size: 1rem; line-height: 1.6; margin-bottom: 0.5rem;">
+          <strong>Technologies Used:</strong> Python, AI APIs, Medical Datasets
+        </p>
+        <a href="https://healthcare-chatbot-ai-kvh3smtuxf4upikxvzr8dn.streamlit.app/" class="resume-btn" target="_blank" style="margin-top: 1rem; display: inline-block;">VISIT PROJECT</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="form-container" data-aos="fade-up">
+      <h2 data-aos="fade-up" data-aos-delay="100">Contact Me</h2>
+      <p data-aos="fade-up" data-aos-delay="150">Reach out to me for collaborations, inquiries, or just to say hi!</p>
+      <form id="contactForm">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" name="phone" required />
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit">Send</button>
+      </form>
+      <div id="loadingMessage" class="hidden">Sending...</div>
+      <div id="successMessage" class="hidden">Message sent successfully!</div>
+    </div>
+  </section>
+
+  <!-- Social Media Section -->
+  <div class="social-media">
+    <h2>Social</h2>
+    <p>Let's connect on social media!</p>
+    <a href="https://www.linkedin.com/in/narayana-thota-15a15a26a?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BJHdzF58vShiBXaZRin9i9Q%3D%3D" target="_blank" aria-label="LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+    <a href="https://github.com/narayana-thota" target="_blank" aria-label="GitHub">
+      <i class="fab fa-github"></i>
+    </a>
+    <a href="https://x.com/thota_nara22585?t=51zSUZZiHFnrf-JkU7MOHA&s=08" target="_blank" aria-label="Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+    <a href="https://www.instagram.com/narayana_ane_nenu/" target="_blank" aria-label="Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+  </div>
+
+  <!-- Footer with Copyright -->
+  <footer>
+    <p>© 2025 Narayana Thota | Designed with Passion</p>
+    <div>
+      <a href="#home" onclick="scrollToSection('home')">Home</a>
+      <a href="#about" onclick="scrollToSection('about')">About</a>
+      <a href="#skills" onclick="scrollToSection('skills')">Skills</a>
+      <a href="#projects" onclick="scrollToSection('projects')">Projects</a>
+      <a href="#contact" onclick="scrollToSection('contact')">Contact</a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    function openSidebar() {
+      document.getElementById('sidebar').style.display = 'flex';
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').style.display = 'none';
+    }
+
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        const headerHeight = document.querySelector('header').offsetHeight;
+        const sectionTop = section.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+
+        if (sectionId === 'home') {
+          setTimeout(() => {
+            const currentScroll = window.pageYOffset;
+            const threshold = 50;
+
+            if (currentScroll <= threshold) {
+              return;
+            }
+
+            window.scrollTo({
+              top: sectionTop,
+              behavior: 'smooth'
+            });
+          }, 100);
+        } else {
+          window.scrollTo({
+            top: sectionTop,
+            behavior: 'smooth'
+          });
+        }
+      }
+    }
+
+    // Contact form submission script
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      document.getElementById("loadingMessage").classList.remove("hidden");
+
+      const formData = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        message: document.getElementById("message").value,
+      };
+
+      fetch("https://contactform-backend-19.onrender.com/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("Failed to submit form");
+          return response.json();
+        })
+        .then((data) => {
+          document.getElementById("loadingMessage").classList.add("hidden");
+          if (data.success) {
+            document.getElementById("successMessage").classList.remove("hidden");
+            document.getElementById("contactForm").reset();
+          } else {
+            alert("Error: " + data.message);
+          }
+        })
+        .catch((error) => {
+          document.getElementById("loadingMessage").classList.add("hidden");
+          console.error("Error:", error);
+          alert("An error occurred. Please try again later.");
+        });
+    });
+  </script>
+</body>
+</html>
