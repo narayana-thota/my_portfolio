@@ -41,6 +41,7 @@ It's a sleek, dark-themed, mobile-responsive, and performance-optimized website 
 
 ```
 portfolio/
+├──assets                    #
 ├── index.html               # Main HTML file
 ├── styles.css               # All custom CSS
 ├── script.js                # Scroll, AOS init, and interactivity
