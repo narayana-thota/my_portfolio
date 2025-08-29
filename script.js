@@ -49,7 +49,7 @@ document.getElementById("contactForm").addEventListener("submit", function (e) {
     message: document.getElementById("message").value,
   };
 
-  // --- THIS IS THE LINE I CHANGED ---
+  // --- THIS IS THE CORRECTED LINE ---
   // It now points to your new server URL and the correct '/contact' endpoint
   fetch("https://contact-form-project-1-2qi5.onrender.com/contact", {
     method: "POST",
