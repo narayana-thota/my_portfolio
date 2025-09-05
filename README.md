@@ -2,7 +2,7 @@
 
 🎉 Welcome to my **Personal Developer Portfolio**, a fully custom-built website showcasing my journey, skills, and projects in web development and AI/ML.
 
-🌐 **Live Site**: [Visit Portfolio](https://thotanarayana.netlify.app/)
+🌐 **Live Site**: [Visit Portfolio](https://https://narayanathota.netlify.app/)
 
 ---
 
