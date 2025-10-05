@@ -51,7 +51,7 @@ document.getElementById("contactForm").addEventListener("submit", function (e) {
 
   // --- THIS IS THE CORRECTED LINE ---
   // It now points to your new server URL and the correct '/contact' endpoint
-  fetch("https://contact-form-project-1-2qi5.onrender.com/contact", {
+  fetch(" https://contact-form-project-1-2qi5.onrender.com/contact", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
