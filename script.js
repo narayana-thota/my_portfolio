@@ -1,88 +1,143 @@
-AOS.init();
+import express from "express";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import axios from "axios";
+import cors from "cors";
 
-function openSidebar() {
-  document.getElementById('sidebar').style.display = 'flex';
+dotenv.config();
+const app = express();
+
+// --- Pre-Flight Check for Environment Variables ---
+const requiredEnvVars = [
+    'MONGODB_URI',
+    'ZOHO_CLIENT_ID',
+    'ZOHO_CLIENT_SECRET',
+    'ZOHO_REFRESH_TOKEN',
+    'ZOHO_ACCOUNT_ID',
+    'PORTFOLIO_OWNER_EMAIL'
+];
+for (const varName of requiredEnvVars) {
+    if (!process.env[varName]) {
+        console.error(`❌ FATAL ERROR: Environment variable ${varName} is not defined.`);
+        process.exit(1);
+    }
 }
 
-function closeSidebar() {
-  document.getElementById('sidebar').style.display = 'none';
-}
+// --- Middleware ---
+app.use(cors());
+app.use(bodyParser.json());
 
-function scrollToSection(sectionId) {
-  const section = document.getElementById(sectionId);
-  if (section) {
-    const headerHeight = document.querySelector('header').offsetHeight;
-    const sectionTop = section.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+// --- MongoDB Connection ---
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log("✅ Successfully connected to MongoDB Atlas!"))
+    .catch(err => console.error("❌ MongoDB connection error:", err));
 
-    if (sectionId === 'home') {
-      setTimeout(() => {
-        const currentScroll = window.pageYOffset;
-        const threshold = 50;
+// --- Mongoose Schema and Model ---
+const contactSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    message: { type: String, required: true },
+    submittedAt: { type: Date, default: Date.now }
+});
+const Contact = mongoose.model("Contact", contactSchema);
 
-        if (currentScroll <= threshold) {
-          return;
+// --- Zoho API Function ---
+const getZohoAccessToken = async () => {
+    try {
+        const response = await axios.post(
+            `https://accounts.zoho.in/oauth/v2/token`, // This stays .in because it's the regional auth server
+            null,
+            {
+                params: {
+                    refresh_token: process.env.ZOHO_REFRESH_TOKEN,
+                    client_id: process.env.ZOHO_CLIENT_ID,
+                    client_secret: process.env.ZOHO_CLIENT_SECRET,
+                    grant_type: 'refresh_token',
+                }
+            }
+        );
+        console.log("✅ Successfully obtained new Zoho Access Token.");
+        return response.data.access_token;
+    } catch (error) {
+        console.error("❌ Failed to get Zoho Access Token:", error.response ? error.response.data : error.message);
+        return null;
+    }
+};
+
+// --- API Routes ---
+app.get('/', (req, res) => {
+    res.send("🚀 Welcome to the Contact Form API!");
+});
+
+// Main endpoint to handle form submissions
+app.post('/contact', async (req, res) => {
+    const { name, email, phone, message } = req.body;
+
+    if (!name || !email || !phone || !message) {
+        return res.status(400).json({ error: "All fields are required." });
+    }
+
+    try {
+        const contact = new Contact({ name, email, phone, message });
+        await contact.save();
+        console.log("✅ Contact submission saved to MongoDB.");
+    } catch (dbError) {
+        console.error("❌ Database Save Error:", dbError);
+        return res.status(500).json({ error: "Failed to save your message. Please try again." });
+    }
+
+    try {
+        const accessToken = await getZohoAccessToken();
+        if (!accessToken) {
+            throw new Error("Could not obtain Access Token to send email.");
         }
 
-        window.scrollTo({
-          top: sectionTop,
-          behavior: 'smooth'
-        });
-      }, 100);
-    } else {
-      window.scrollTo({
-        top: sectionTop,
-        behavior: 'smooth'
-      });
+        const fromAddress = `narayanathota@zohomail.in`;
+        const toAddress = process.env.PORTFOLIO_OWNER_EMAIL;
+
+        const mimeContent = [
+            `From: "Portfolio Notification" <${fromAddress}>`,
+            `To: ${toAddress}`,
+            `Reply-To: ${email}`,
+            `Subject: 🚀 New Contact Form Submission from ${name}`,
+            `Content-Type: text/html; charset=utf-8`,
+            ``,
+            `<h2>You have a new message from your portfolio:</h2><hr>`,
+            `<h3>Details:</h3>`,
+            `<ul><li><strong>Name:</strong> ${name}</li><li><strong>Email:</strong> <a href="mailto:${email}">${email}</a></li><li><strong>Phone:</strong> ${phone}</li></ul>`,
+            `<h3>Message:</h3><p>${message}</p>`
+        ].join('\r\n');
+
+        // ✅ CHANGE 1: Using the global .com API endpoint
+        const createDraftResponse = await axios.post(
+            `https://mail.zoho.com/api/accounts/${process.env.ZOHO_ACCOUNT_ID}/messages`,
+            { content: mimeContent },
+            { headers: { Authorization: `Zoho-oauthtoken ${accessToken}` } }
+        );
+
+        const messageId = createDraftResponse.data.data.id;
+        
+        // ✅ CHANGE 2: Using the global .com API endpoint
+        await axios.post(
+            `https://mail.zoho.com/api/accounts/${process.env.ZOHO_ACCOUNT_ID}/messages/${messageId}/send`,
+            {},
+            { headers: { Authorization: `Zoho-oauthtoken ${accessToken}` } }
+        );
+
+        console.log('✅ Notification email sent successfully via Zoho API.');
+
+    } catch (emailError) {
+        console.error("❌ Zoho API Email Send Error:", emailError.response ? emailError.response.data : emailError.message);
     }
-  }
-}
 
-// Contact form submission script
-document.getElementById("contactForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  document.getElementById("loadingMessage").classList.remove("hidden");
+    res.status(201).json({ success: true, message: "Form submitted successfully!" });
+});
 
-  const formData = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    message: document.getElementById("message").value,
-  };
 
-  // --- THIS IS THE CORRECTED LINE ---
-  // It now points to your new server URL and the correct '/contact' endpoint
-  fetch(" https://contact-form-project-1-2qi5.onrender.com/contact", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData),
-  })
-    .then((response) => {
-      if (!response.ok) throw new Error("Failed to submit form");
-      return response.json();
-    })
-    .then((data) => {
-      document.getElementById("loadingMessage").classList.add("hidden");
-      if (data.success) {
-        document.getElementById("successMessage").classList.remove("hidden");
-        document.getElementById("contactForm").reset();
-        // Hide the success message after 3 seconds
-        setTimeout(() => {
-            document.getElementById("successMessage").classList.add("hidden");
-        }, 3000);
-      } else {
-        // Using a custom message box instead of alert
-        const statusDiv = document.getElementById("successMessage");
-        statusDiv.textContent = "Error: " + data.message;
-        statusDiv.style.color = "red";
-        statusDiv.classList.remove("hidden");
-      }
-    })
-    .catch((error) => {
-      document.getElementById("loadingMessage").classList.add("hidden");
-      console.error("Error:", error);
-      const statusDiv = document.getElementById("successMessage");
-      statusDiv.textContent = "An error occurred. Please try again later.";
-      statusDiv.style.color = "red";
-      statusDiv.classList.remove("hidden");
-    });
+// --- Start Server ---
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
